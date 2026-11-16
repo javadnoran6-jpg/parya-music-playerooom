@@ -1,197 +1,121 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پلیر موزیک مدرن</title>
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- FontAwesome برای آیکون‌ها -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!doctype html>
+<html lang="fa" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8b6fd6">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<title>جوجه رنگی</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap');
-body {
-font-family: 'Vazirmatn', sans-serif;
-}
-</style>
-</head>
-<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 text-white min-h-screen flex items-center justify-center p-4">
-<div class="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/20 p-6">
-<!-- هدر پلیر -->
-<div class="flex justify-between items-center mb-6">
-<span class="text-xs uppercase tracking-widest text-purple-300 font-semibold">پخش‌کننده موزیک</span>
-<i class="fa-solid fa-music text-purple-300"></i>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;font-family:Tahoma,system-ui,sans-serif;background:linear-gradient(160deg,#8b6fd6,#e9a6d8 55%,#f6e8f3);color:#2a2340}
+#app{height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;color:#fff;font-weight:bold}
+.pill{background:#fff9e8;color:#4a3b8c;border-radius:20px;padding:6px 14px;font-size:14px}
+main{flex:1;overflow-y:auto;background:#faf8ff;border-radius:24px 24px 0 0;padding:14px}
+nav{display:flex;background:#fff;box-shadow:0 -2px 12px #0002;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;background:none;padding:12px 0;font:inherit;color:#8a82a8}
+nav button.on{color:#6b43e0;font-weight:bold}
+.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 1px 6px #0001;display:flex;align-items:center;gap:12px}
+.card .t{flex:1;min-width:0}.card b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card small{color:#7b7499}
+.rank{width:32px;height:32px;border-radius:50%;background:#6b43e0;color:#fff;display:grid;place-items:center;font-size:14px}
+.btn{border:0;border-radius:12px;background:#6b43e0;color:#fff;padding:9px 16px;font:inherit}
+.btn.ghost{background:#ece6ff;color:#6b43e0}
+.fab{position:fixed;left:18px;bottom:calc(80px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;font-size:28px;box-shadow:0 4px 14px #0004;padding:0}
+#room{position:fixed;inset:0;background:#faf8ff;display:none;flex-direction:column;padding-top:env(safe-area-inset-top);z-index:5}
+#room.show{display:flex}
+#rh{background:#7c5cd6;color:#fff;padding:14px;display:flex;gap:12px;align-items:center}
+#rh button{background:none;border:0;color:#fff;font-size:22px}
+#msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:80%;padding:8px 12px;border-radius:14px;background:#fff;align-self:flex-start;box-shadow:0 1px 4px #0001;word-wrap:break-word;white-space:pre-wrap}
+.m.me{align-self:flex-end;background:#e4dbff}
+.m i{display:block;font-size:11px;color:#8a6fd6;font-style:normal;margin-bottom:2px}
+#bar{display:flex;gap:8px;padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:#fff}
+#bar input,.in{flex:1;border:1px solid #d9d0f5;border-radius:20px;padding:11px 14px;font:inherit;outline:none;width:100%}
+#login{position:fixed;inset:0;background:linear-gradient(160deg,#8b6fd6,#e9a6d8);display:none;place-items:center;z-index:9;padding:24px}
+#login .box{background:#fff;border-radius:22px;padding:24px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:14px;text-align:center}
+#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#2a2340;color:#fff;padding:10px 18px;border-radius:20px;display:none;z-index:20}
+</style></head><body>
+<div id="app">
+ <header><span id="title">جوجه رنگی</span><span class="pill">💎 <span id="dia">0</span></span></header>
+ <main id="main"></main>
+ <nav><button data-t="pub">چت عمومی</button><button data-t="groups">گروه‌ها</button><button data-t="me">پروفایل</button></nav>
 </div>
-<!-- کاور آلبوم -->
-<div class="relative w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg border border-white/10 group">
-<img id="cover-img" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80" alt="Album Cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-<div class="absolute inset-0 bg-black/20"></div>
-</div>
-<!-- اطلاعات آهنگ -->
-<div class="text-center mb-6">
-<h2 id="track-title" class="text-xl font-bold truncate mb-1">نام آهنگ نمونه</h2>
-<p id="track-artist" class="text-sm text-purple-200 truncate">نام هنرمند</p>
-</div>
-<!-- نوار پیشرفت -->
-<div class="mb-6">
-<div class="flex justify-between text-xs text-purple-300 mb-1">
-<span id="current-time">0:00</span>
-<span id="duration">0:00</span>
-</div>
-<input type="range" id="progress-bar" value="0" max="100" class="w-full h-1.5 bg-purple-900/50 rounded-lg appearance-none cursor-pointer accent-purple-400">
-</div>
-<!-- دکمه‌های کنترل -->
-<div class="flex justify-around items-center mb-6">
-<button id="shuffle-btn" class="text-purple-300 hover:text-white transition text-lg"><i class="fa-solid fa-shuffle"></i></button>
-<button id="prev-btn" class="text-white hover:text-purple-300 transition text-2xl"><i class="fa-solid fa-backward-step"></i></button>
-<button id="play-btn" class="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white shadow-lg hover:opacity-90 transition transform hover:scale-105 text-2xl">
-<i id="play-icon" class="fa-solid fa-play mr-0.5"></i>
-</button>
-<button id="next-btn" class="text-white hover:text-purple-300 transition text-2xl"><i class="fa-solid fa-forward-step"></i></button>
-<button id="repeat-btn" class="text-purple-300 hover:text-white transition text-lg"><i class="fa-solid fa-repeat"></i></button>
-</div>
-<!-- کنترل صدا -->
-<div class="flex items-center gap-3 bg-black/20 p-3 rounded-xl">
-<i class="fa-solid fa-volume-high text-purple-300 text-sm"></i>
-<input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="w-full h-1 bg-purple-900/50 rounded-lg appearance-none cursor-pointer accent-purple-400">
-</div>
-</div>
-<!-- اسکریپت پلیر -->
+<div id="room"><div id="rh"><button id="back">→</button><b id="rname"></b></div><div id="msgs"></div>
+ <div id="bar"><input id="txt" placeholder="پیام..." maxlength="500" autocomplete="off"><button class="btn" id="sendb">ارسال</button></div></div>
+<div id="login"><div class="box"><h2 style="margin:0">خوش اومدی 🐥</h2><input class="in" id="nm" placeholder="اسم نمایشی" maxlength="20"><button class="btn" id="go">شروع</button></div></div>
+<div id="toast"></div>
 <script>
-const songs = [
-{
-title: "رویای شبانه",
-artist: "هنرمند اول",
-src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80"
-},
-{
-title: "آرامش درون",
-artist: "هنرمند دوم",
-src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=500&q=80"
+const $=s=>document.querySelector(s);
+let me=null;try{me=JSON.parse(localStorage.getItem('jooje'))}catch{}
+let room=null,tab='pub',es=null;
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',2500)}
+async function api(p,m='GET',b){
+  const r=await fetch('/api/'+p,{method:m,headers:{'Content-Type':'application/json','x-id':me?me.id:'','x-secret':me?me.secret:''},body:b?JSON.stringify(b):undefined});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'خطا');return j}
+function setMe(u){me={...me,...u};localStorage.setItem('jooje',JSON.stringify(me));$('#dia').textContent=me.diamonds}
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+async function start(){
+  if(!me){$('#login').style.display='grid';return}
+  $('#login').style.display='none';
+  try{setMe(await api('me'))}catch{localStorage.removeItem('jooje');me=null;return start()}
+  connect();show('pub');
 }
-];
-let currentSongIndex = 0;
-let isPlaying = false;
-const audioElement = new Audio(songs[currentSongIndex].src);
-const playBtn = document.getElementById('play-btn');
-const playIcon = document.getElementById('play-icon');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const titleEl = document.getElementById('track-title');
-const artistEl = document.getElementById('track-artist');
-const coverEl = document.getElementById('cover-img');
-const progressBar = document.getElementById('progress-bar');
-const currentTimeEl = document.getElementById('current-time');
-const durationEl = document.getElementById('duration');
-const volumeSlider = document.getElementById('volume-slider');
-function loadSong(song) {
-titleEl.textContent = song.title;
-artistEl.textContent = song.artist;
-coverEl.src = song.cover;
-audioElement.src = song.src;
+$('#go').onclick=async()=>{try{const u=await api('register','POST',{name:$('#nm').value});me=u;localStorage.setItem('jooje',JSON.stringify(u));start()}catch(e){toast(e.message)}};
+function connect(){
+  if(es)es.close();
+  es=new EventSource(`/api/stream?id=${me.id}&secret=${me.secret}`);
+  es.addEventListener('msg',e=>{const m=JSON.parse(e.data);if(room&&room.id===m.room)addMsg(m)});
 }
-function togglePlay() {
-if (isPlaying) {
-audioElement.pause();
-playIcon.classList.replace('fa-pause', 'fa-play');
-playIcon.classList.add('mr-0.5');
-} else {
-audioElement.play();
-playIcon.classList.replace('fa-play', 'fa-pause');
-playIcon.classList.remove('mr-0.5');
-}
-isPlaying = !isPlaying;
-}
-playBtn.addEventListener('click', togglePlay);
-nextBtn.addEventListener('click', () => {
-currentSongIndex = (currentSongIndex + 1) % songs.length;
-loadSong(songs[currentSongIndex]);
-if (isPlaying) audioElement.play();
-});
-prevBtn.addEventListener('click', () => {
-currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-loadSong(songs[currentSongIndex]);
-if (isPlaying) audioElement.play();
-});
-audioElement.addEventListener('timeupdate', () => {
-const current = audioElement.currentTime;
-const duration = audioElement.duration || 0;
-progressBar.value = (current / duration) * 100 || 0;
-currentTimeEl.textContent = formatTime(current);
-durationEl.textContent = formatTime(duration);
-});
-progressBar.addEventListener('input', () => {
-const duration = audioElement.duration || 0;
-audioElement.currentTime = (progressBar.value / 100) * duration;
-});
-volumeSlider.addEventListener('input', (e) => {
-audioElement.volume = e.target.value;
-});
-function formatTime(seconds) {
-const mins = Math.floor(seconds / 60);
-const secs = Math.floor(seconds % 60);
-return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-}
-audioElement.addEventListener('loadedmetadata', () => {
-durationEl.textContent = formatTime(audioElement.duration);
-});
-const BOT_TOKEN = "CJFDAI0FZPWHLSJGXMRYRQLCCFITBDYWEVOGZZEQSDDENWXZKWJKGMMRBDBVQSHU";
-const API = "https://botapi.rubika.ir/v3/" + BOT_TOKEN + "/";
-let offsetId = null, started = false;
-const st = document.createElement("p");
-st.className = "text-xs text-purple-300 text-center mt-3";
-st.textContent = "اتصال به ربات...";
-document.body.appendChild(st);
-
-async function rb(method, body) {
-  const r = await fetch(API + method, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body || {})
-  });
-  return r.json();
-}
-function say(chatId, text) { rb("sendMessage", { chat_id: chatId, text: text }).catch(() => {}); }
-function playNow() { if (!isPlaying) togglePlay(); }
-function pauseNow() { if (isPlaying) togglePlay(); }
-
-function handle(chatId, text) {
-  const t = (text || "").trim().toLowerCase().replace(/^\//, "");
-  if (!t) return;
-  if (t.includes("توقف") || t === "pause" || t === "stop") {
-    pauseNow(); say(chatId, "⏸ متوقف شد");
-  } else if (t.includes("بعدی") || t === "next") {
-    nextBtn.click(); playNow(); say(chatId, "⏭ " + songs[currentSongIndex].title);
-  } else if (t.includes("قبلی") || t === "prev") {
-    prevBtn.click(); playNow(); say(chatId, "⏮ " + songs[currentSongIndex].title);
-  } else if (t.includes("پخش") || t === "play") {
-    playNow(); say(chatId, "▶️ در حال پخش: " + songs[currentSongIndex].title);
+function show(t){
+  tab=t;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  const main=$('#main');main.replaceChildren();
+  if(t==='pub'){
+    const c=el('div','card');const x=el('div','t');x.append(el('b',null,'چت عمومی'),el('small',null,'همه کاربران اینجا هستند'));
+    const b=el('button','btn','ورود');b.onclick=()=>openRoom('public','چت عمومی');c.append(x,b);main.append(c);
+  }
+  if(t==='groups'){loadGroups()}
+  if(t==='me'){
+    const c=el('div','card');const x=el('div','t');x.append(el('b',null,me.name),el('small',null,'الماس: '+me.diamonds));c.append(x);
+    const o=el('button','btn ghost','خروج از حساب');o.onclick=()=>{if(confirm('خروج؟ بدون ذخیره، حساب از دست می‌رود.')){localStorage.removeItem('jooje');location.reload()}};
+    main.append(c,o,el('p',null,'هر ۱۰ پیام ۵ الماس هدیه می‌گیری. ساخت گروه ۱۰۰ الماس است.'));
   }
 }
-
-async function poll() {
-  try {
-    const body = { limit: 20 };
-    if (offsetId) body.offset_id = offsetId;
-    const res = await rb("getUpdates", body);
-    const d = res.data || {};
-    if (d.next_offset_id) offsetId = d.next_offset_id;
-    if (started) {
-      for (const u of d.updates || []) {
-        const m = u.new_message;
-        if (u.type === "NewMessage" && m && m.sender_type !== "Bot") handle(u.chat_id, m.text);
-      }
-    }
-    started = true;
-    st.textContent = "ربات متصل است ✅";
-  } catch (e) {
-    st.textContent = "خطا در اتصال به ربات";
-  }
-  setTimeout(poll, 2000);
+async function loadGroups(){
+  const main=$('#main');
+  try{
+    const gs=await api('groups');if(tab!=='groups')return;main.replaceChildren();
+    if(!gs.length)main.append(el('p',null,'هنوز گروهی نیست. اولین گروه را بساز!'));
+    gs.forEach((g,i)=>{
+      const c=el('div','card');c.append(el('div','rank',i+1));
+      const x=el('div','t');x.append(el('b',null,g.name),el('small',null,`امتیاز ${g.score} · ${g.members} عضو`));
+      const b=el('button','btn'+(g.joined?'':' ghost'),g.joined?'ورود':'عضویت');
+      b.onclick=async()=>{try{if(!g.joined)await api(`groups/${g.id}/join`,'POST');openRoom(g.id,g.name)}catch(e){toast(e.message)}};
+      c.append(x,b);main.append(c);
+    });
+    const f=el('button','btn fab','+');f.onclick=createGroup;main.append(f);
+  }catch(e){toast(e.message)}
 }
-poll();
-</script>
-</body>
-</html>
+async function createGroup(){
+  const name=prompt('نام گروه (ساخت: ۱۰۰ الماس)');if(!name)return;
+  try{const r=await api('groups','POST',{name});setMe(r.me);toast('گروه ساخته شد');loadGroups()}catch(e){toast(e.message)}
+}
+async function openRoom(id,name){
+  room={id};$('#rname').textContent=name;$('#msgs').replaceChildren();$('#room').classList.add('show');
+  try{(await api(`rooms/${id}/messages`)).forEach(addMsg)}catch(e){toast(e.message)}
+}
+function addMsg(m){
+  const box=$('#msgs'),d=el('div','m'+(m.uid===me.id?' me':''));
+  if(m.uid!==me.id)d.append(el('i',null,m.name));d.append(document.createTextNode(m.text));
+  box.append(d);box.scrollTop=box.scrollHeight;
+}
+async function send(){
+  const t=$('#txt').value.trim();if(!t||!room)return;$('#txt').value='';
+  try{setMe((await api(`rooms/${room.id}/send`,'POST',{text:t})).me)}catch(e){toast(e.message)}
+}
+$('#sendb').onclick=send;$('#txt').onkeydown=e=>{if(e.key==='Enter')send()};
+$('#back').onclick=()=>{room=null;$('#room').classList.remove('show');if(tab==='groups')loadGroups()};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+start();
+</script></body></html>
