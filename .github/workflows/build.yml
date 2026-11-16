@@ -1,6 +1,7 @@
 name: Build APK
 on:
   push:
+    branches: [main, master]
   workflow_dispatch:
 jobs:
   build:
@@ -14,20 +15,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Prepare Capacitor project
-        run: |
-          npm init -y
-          npm i @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
-          mkdir -p www
-          cp index.html www/index.html
-          npx cap add android
-          npx cap sync android
+      - run: npm install
+      - run: npx cap add android
+      - run: npx cap sync android
       - name: Build debug APK
-        run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+        run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: app-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
