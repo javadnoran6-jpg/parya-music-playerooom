@@ -1,121 +1,78 @@
 <!doctype html>
-<html lang="fa" dir="rtl"><head>
+<html lang="fa" dir="rtl">
+<head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#8b6fd6">
-<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
-<title>جوجه رنگی</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سازنده ویدیو پری</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0;font-family:Tahoma,system-ui,sans-serif;background:linear-gradient(160deg,#8b6fd6,#e9a6d8 55%,#f6e8f3);color:#2a2340}
-#app{height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;color:#fff;font-weight:bold}
-.pill{background:#fff9e8;color:#4a3b8c;border-radius:20px;padding:6px 14px;font-size:14px}
-main{flex:1;overflow-y:auto;background:#faf8ff;border-radius:24px 24px 0 0;padding:14px}
-nav{display:flex;background:#fff;box-shadow:0 -2px 12px #0002;padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;border:0;background:none;padding:12px 0;font:inherit;color:#8a82a8}
-nav button.on{color:#6b43e0;font-weight:bold}
-.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 1px 6px #0001;display:flex;align-items:center;gap:12px}
-.card .t{flex:1;min-width:0}.card b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.card small{color:#7b7499}
-.rank{width:32px;height:32px;border-radius:50%;background:#6b43e0;color:#fff;display:grid;place-items:center;font-size:14px}
-.btn{border:0;border-radius:12px;background:#6b43e0;color:#fff;padding:9px 16px;font:inherit}
-.btn.ghost{background:#ece6ff;color:#6b43e0}
-.fab{position:fixed;left:18px;bottom:calc(80px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;font-size:28px;box-shadow:0 4px 14px #0004;padding:0}
-#room{position:fixed;inset:0;background:#faf8ff;display:none;flex-direction:column;padding-top:env(safe-area-inset-top);z-index:5}
-#room.show{display:flex}
-#rh{background:#7c5cd6;color:#fff;padding:14px;display:flex;gap:12px;align-items:center}
-#rh button{background:none;border:0;color:#fff;font-size:22px}
-#msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
-.m{max-width:80%;padding:8px 12px;border-radius:14px;background:#fff;align-self:flex-start;box-shadow:0 1px 4px #0001;word-wrap:break-word;white-space:pre-wrap}
-.m.me{align-self:flex-end;background:#e4dbff}
-.m i{display:block;font-size:11px;color:#8a6fd6;font-style:normal;margin-bottom:2px}
-#bar{display:flex;gap:8px;padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:#fff}
-#bar input,.in{flex:1;border:1px solid #d9d0f5;border-radius:20px;padding:11px 14px;font:inherit;outline:none;width:100%}
-#login{position:fixed;inset:0;background:linear-gradient(160deg,#8b6fd6,#e9a6d8);display:none;place-items:center;z-index:9;padding:24px}
-#login .box{background:#fff;border-radius:22px;padding:24px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:14px;text-align:center}
-#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#2a2340;color:#fff;padding:10px 18px;border-radius:20px;display:none;z-index:20}
-</style></head><body>
-<div id="app">
- <header><span id="title">جوجه رنگی</span><span class="pill">💎 <span id="dia">0</span></span></header>
- <main id="main"></main>
- <nav><button data-t="pub">چت عمومی</button><button data-t="groups">گروه‌ها</button><button data-t="me">پروفایل</button></nav>
+:root{--bg:#120a24;--card:#1e1238;--text:#f3ecff;--acc:#b066ff;--mut:#9a8bb8}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,system-ui,sans-serif;background:radial-gradient(circle at top,#2a1457,var(--bg));color:var(--text);min-height:100vh;padding:16px}
+main{max-width:560px;margin:auto}
+h1{text-align:center;font-size:1.5rem}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{flex:1;padding:10px;border:0;border-radius:10px;background:var(--card);color:var(--mut);font:inherit}
+.tabs button.on{background:var(--acc);color:#fff}
+.card{background:var(--card);border-radius:16px;padding:16px}
+textarea,select,input{width:100%;padding:10px;border-radius:10px;border:1px solid #3a2a60;background:#150c2b;color:var(--text);font:inherit;margin:6px 0 12px}
+.eyes{display:flex;gap:10px;margin:6px 0 14px}
+.eyes label{width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid transparent}
+.eyes input{display:none}
+.eyes input:checked+span{outline:3px solid #fff}
+.eyes span{display:block;width:100%;height:100%;border-radius:50%}
+.go{width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(90deg,#b066ff,#ff66c4);color:#fff;font:inherit;font-weight:bold}
+.go:disabled{opacity:.5}
+#status{margin-top:14px;text-align:center;color:var(--mut)}
+video{width:100%;border-radius:12px;margin-top:12px}
+</style>
+</head>
+<body>
+<main>
+<h1>🧚 سازنده ویدیو پری چشم‌رنگی</h1>
+<div class="tabs">
+<button id="t1" class="on">متن به ویدیو</button>
+<button id="t2">ساخت خودکار</button>
 </div>
-<div id="room"><div id="rh"><button id="back">→</button><b id="rname"></b></div><div id="msgs"></div>
- <div id="bar"><input id="txt" placeholder="پیام..." maxlength="500" autocomplete="off"><button class="btn" id="sendb">ارسال</button></div></div>
-<div id="login"><div class="box"><h2 style="margin:0">خوش اومدی 🐥</h2><input class="in" id="nm" placeholder="اسم نمایشی" maxlength="20"><button class="btn" id="go">شروع</button></div></div>
-<div id="toast"></div>
+<div class="card">
+<div id="p1"><label>توضیح صحنه</label>
+<textarea id="prompt" rows="4" placeholder="مثلاً: پری در جنگل شبانه بین کرم‌های شب‌تاب پرواز می‌کند"></textarea></div>
+<div id="p2" hidden><label>ایده داستان</label>
+<textarea id="idea" rows="4" placeholder="ایده کلی داستان را بنویس؛ صحنه‌ها خودکار ساخته می‌شوند"></textarea>
+<label>تعداد صحنه</label>
+<select id="scenes"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+<label>رنگ چشم پری</label>
+<div class="eyes" id="eyes"></div>
+<button class="go" id="go">بساز ✨</button>
+<div id="status"></div>
+<div id="result"></div>
+</div>
+</main>
 <script>
-const $=s=>document.querySelector(s);
-let me=null;try{me=JSON.parse(localStorage.getItem('jooje'))}catch{}
-let room=null,tab='pub',es=null;
-function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',2500)}
-async function api(p,m='GET',b){
-  const r=await fetch('/api/'+p,{method:m,headers:{'Content-Type':'application/json','x-id':me?me.id:'','x-secret':me?me.secret:''},body:b?JSON.stringify(b):undefined});
-  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'خطا');return j}
-function setMe(u){me={...me,...u};localStorage.setItem('jooje',JSON.stringify(me));$('#dia').textContent=me.diamonds}
-const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
-async function start(){
-  if(!me){$('#login').style.display='grid';return}
-  $('#login').style.display='none';
-  try{setMe(await api('me'))}catch{localStorage.removeItem('jooje');me=null;return start()}
-  connect();show('pub');
-}
-$('#go').onclick=async()=>{try{const u=await api('register','POST',{name:$('#nm').value});me=u;localStorage.setItem('jooje',JSON.stringify(u));start()}catch(e){toast(e.message)}};
-function connect(){
-  if(es)es.close();
-  es=new EventSource(`/api/stream?id=${me.id}&secret=${me.secret}`);
-  es.addEventListener('msg',e=>{const m=JSON.parse(e.data);if(room&&room.id===m.room)addMsg(m)});
-}
-function show(t){
-  tab=t;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  const main=$('#main');main.replaceChildren();
-  if(t==='pub'){
-    const c=el('div','card');const x=el('div','t');x.append(el('b',null,'چت عمومی'),el('small',null,'همه کاربران اینجا هستند'));
-    const b=el('button','btn','ورود');b.onclick=()=>openRoom('public','چت عمومی');c.append(x,b);main.append(c);
+const colors={blue:'#3aa0ff',green:'#35d07f',violet:'#a35bff',amber:'#ffb02e',pink:'#ff5fb0',red:'#ff4d4d'};
+let eye='blue',mode=1;
+const $=id=>document.getElementById(id);
+$('eyes').innerHTML=Object.entries(colors).map(([k,c],i)=>
+ `<label><input type="radio" name="e" value="${k}" ${i?'':'checked'}><span style="background:${c}"></span></label>`).join('');
+document.querySelectorAll('input[name=e]').forEach(r=>r.onchange=()=>eye=r.value);
+function tab(m){mode=m;$('p1').hidden=m!==1;$('p2').hidden=m!==2;$('t1').classList.toggle('on',m===1);$('t2').classList.toggle('on',m===2)}
+$('t1').onclick=()=>tab(1);$('t2').onclick=()=>tab(2);
+$('go').onclick=async()=>{
+ $('go').disabled=true;$('result').innerHTML='';$('status').textContent='در حال ارسال…';
+ try{
+  const url=mode===1?'/api/text-to-video':'/api/auto-video';
+  const body=mode===1?{prompt:$('prompt').value,eyeColor:eye}:{idea:$('idea').value,eyeColor:eye,scenes:$('scenes').value};
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const {id,error}=await r.json(); if(error) throw new Error(error);
+  while(true){
+   await new Promise(r=>setTimeout(r,3000));
+   const s=await (await fetch('/api/status/'+id)).json();
+   if(s.status==='done'){$('status').textContent='آماده شد ✅';$('result').innerHTML=`<video src="${s.url}" controls autoplay loop playsinline></video><a href="${s.url}" download style="color:#b066ff">دانلود</a>`;break}
+   if(s.status==='error') throw new Error(s.error);
+   $('status').textContent=s.progress||'در حال ساخت…';
   }
-  if(t==='groups'){loadGroups()}
-  if(t==='me'){
-    const c=el('div','card');const x=el('div','t');x.append(el('b',null,me.name),el('small',null,'الماس: '+me.diamonds));c.append(x);
-    const o=el('button','btn ghost','خروج از حساب');o.onclick=()=>{if(confirm('خروج؟ بدون ذخیره، حساب از دست می‌رود.')){localStorage.removeItem('jooje');location.reload()}};
-    main.append(c,o,el('p',null,'هر ۱۰ پیام ۵ الماس هدیه می‌گیری. ساخت گروه ۱۰۰ الماس است.'));
-  }
-}
-async function loadGroups(){
-  const main=$('#main');
-  try{
-    const gs=await api('groups');if(tab!=='groups')return;main.replaceChildren();
-    if(!gs.length)main.append(el('p',null,'هنوز گروهی نیست. اولین گروه را بساز!'));
-    gs.forEach((g,i)=>{
-      const c=el('div','card');c.append(el('div','rank',i+1));
-      const x=el('div','t');x.append(el('b',null,g.name),el('small',null,`امتیاز ${g.score} · ${g.members} عضو`));
-      const b=el('button','btn'+(g.joined?'':' ghost'),g.joined?'ورود':'عضویت');
-      b.onclick=async()=>{try{if(!g.joined)await api(`groups/${g.id}/join`,'POST');openRoom(g.id,g.name)}catch(e){toast(e.message)}};
-      c.append(x,b);main.append(c);
-    });
-    const f=el('button','btn fab','+');f.onclick=createGroup;main.append(f);
-  }catch(e){toast(e.message)}
-}
-async function createGroup(){
-  const name=prompt('نام گروه (ساخت: ۱۰۰ الماس)');if(!name)return;
-  try{const r=await api('groups','POST',{name});setMe(r.me);toast('گروه ساخته شد');loadGroups()}catch(e){toast(e.message)}
-}
-async function openRoom(id,name){
-  room={id};$('#rname').textContent=name;$('#msgs').replaceChildren();$('#room').classList.add('show');
-  try{(await api(`rooms/${id}/messages`)).forEach(addMsg)}catch(e){toast(e.message)}
-}
-function addMsg(m){
-  const box=$('#msgs'),d=el('div','m'+(m.uid===me.id?' me':''));
-  if(m.uid!==me.id)d.append(el('i',null,m.name));d.append(document.createTextNode(m.text));
-  box.append(d);box.scrollTop=box.scrollHeight;
-}
-async function send(){
-  const t=$('#txt').value.trim();if(!t||!room)return;$('#txt').value='';
-  try{setMe((await api(`rooms/${room.id}/send`,'POST',{text:t})).me)}catch(e){toast(e.message)}
-}
-$('#sendb').onclick=send;$('#txt').onkeydown=e=>{if(e.key==='Enter')send()};
-$('#back').onclick=()=>{room=null;$('#room').classList.remove('show');if(tab==='groups')loadGroups()};
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t));
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
-start();
-</script></body></html>
+ }catch(e){$('status').textContent='خطا: '+e.message}
+ $('go').disabled=false;
+};
+</script>
+</body>
+</html>
